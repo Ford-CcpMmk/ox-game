@@ -1,33 +1,34 @@
 # OX Game
 
-เกม OX ผู้เล่นแข่งกับบอท 3 ระดับ เข้าสู่ระบบด้วย Google/Facebook
-เก็บกระดาน คะแนน และจำนวนชนะติดต่อกันบน PostgreSQL โดย server ตรวจทุกตา
-UI แบบ pastel มีเสียงเกมและปุ่มเปิด–ปิดเสียง
+English | [ไทย](README-th.md)
 
-## ตัวอย่างหน้าจอ
+A company technical assessment: a Tic-Tac-Toe web application with OAuth login,
+three bot difficulty levels, persistent player scores, and win streak bonuses.
+The pastel UI includes game sounds and a mute toggle. Game moves and scoring are validated on the server.
 
-### หน้าเข้าสู่ระบบ
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/login.png" alt="OAuth sign-in screen" width="100%" /></td>
+    <td width="50%"><img src="docs/images/game.png" alt="OX game with bot difficulty and player scores" width="100%" /></td>
+  </tr>
+</table>
 
-![หน้าเข้าสู่ระบบ OX Game ด้วย Google หรือ Facebook](docs/images/login.png)
+## Run locally
 
-### หน้าเล่นเกม
+You need **Node.js 22.14 or newer** (Node 22 LTS recommended), npm, Docker with
+Docker Compose, and OAuth credentials for at least one provider to sign in.
 
-![หน้าเกม OX พร้อมระดับบอท คะแนนรวม และจำนวนชนะติดต่อกัน](docs/images/game.png)
-
-## เริ่มรันในเครื่อง
-
-ต้องมี Node.js **22.14 ขึ้นไป** (แนะนำ Node 22 LTS), npm, Docker และ Docker Compose
-พร้อม OAuth credentials อย่างน้อยหนึ่ง provider สำหรับเข้าสู่ระบบจริง
-
-เปิด terminal ในโฟลเดอร์โปรเจกต์:
+Clone the repository and open its directory:
 
 ```bash
+git clone https://github.com/Ford-CcpMmk/ox-game.git
+cd ox-game
 cp .env.example .env
 openssl rand -base64 32
 ```
 
-นำ secret ที่สร้างไปใส่ `BETTER_AUTH_SECRET` ใน `.env` แล้วเติม Google/Facebook credentials
-ค่า database เริ่มต้นใน `.env.example` ตรงกับ `compose.yaml`
+Put the generated value in `BETTER_AUTH_SECRET` in `.env` and configure Google or
+Facebook credentials as described below. The default `DATABASE_URL` matches `compose.yaml`.
 
 ```bash
 npm ci
@@ -37,88 +38,98 @@ npm run db:generate
 npm run dev
 ```
 
-เปิด [localhost:3000](http://localhost:3000) แล้วเข้าสู่ระบบ
-Font Awesome, Tailwind และ daisyUI ติดตั้งพร้อม `npm ci` แล้ว ไม่ต้องลงแยก
-MCP เป็นเครื่องมือเสริมสำหรับ coding agent ไม่จำเป็นต่อการรันเกม
+Open [localhost:3000](http://localhost:3000) and sign in.
+`npm ci` installs Tailwind CSS, daisyUI, and Font Awesome and automatically generates the
+Prisma Client. The explicit `db:generate` command can also be rerun after schema changes.
+No MCP installation is required to run the application.
 
-| Provider | Callback URL ในเครื่อง |
+### OAuth configuration
+
+Create your own OAuth application through [Google Cloud Console](https://console.cloud.google.com/)
+or [Meta for Developers](https://developers.facebook.com/), then populate `.env`:
+
+| Variable | Value |
+| --- | --- |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Credentials for a Google OAuth client of type Web application |
+| `FACEBOOK_CLIENT_ID`, `FACEBOOK_CLIENT_SECRET` | Facebook Login App ID and secret |
+| `BETTER_AUTH_URL` | Application URL; locally `http://localhost:3000` |
+| `BETTER_AUTH_SECRET` | Random secret generated above |
+| `DATABASE_URL` | PostgreSQL connection URL; the example uses local port 5433 |
+
+Register the corresponding callback URL with your provider:
+
+| Provider | Local callback URL |
 | --- | --- |
 | Google | `http://localhost:3000/api/auth/callback/google` |
 | Facebook | `http://localhost:3000/api/auth/callback/facebook` |
 
-### ตั้งค่าการเข้าสู่ระบบ
+For Google, also set the JavaScript origin to `http://localhost:3000`.
+If the provider application is in testing mode, grant the reviewer's account access as a test user
+or app member as appropriate. Configure at least one provider and use its sign-in button.
+Buttons for unconfigured providers remain visible but cannot complete sign-in.
+Restart the server after editing `.env`. Keep real credentials out of Git.
 
-ใช้ credentials ของ OAuth application ที่คุณสร้างเอง แล้วใส่ลงใน `.env`:
+## Playing and scoring
 
-| ตัวแปร | ค่า |
-| --- | --- |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Client ID และ secret ของ Google OAuth client ชนิด Web application |
-| `FACEBOOK_CLIENT_ID`, `FACEBOOK_CLIENT_SECRET` | App ID และ secret ของแอป Facebook Login |
-| `BETTER_AUTH_URL` | URL ของแอป เริ่มต้น `http://localhost:3000` |
-| `BETTER_AUTH_SECRET` | ค่าสุ่มที่สร้างจากคำสั่งด้านบน |
+Sign in at `/login`, start your first game, and click an empty cell to place X.
+Choose the bot difficulty in the sidebar before the first move or after a round ends.
 
-สร้าง credentials ผ่าน [Google Cloud Console](https://console.cloud.google.com/)
-หรือ [Meta for Developers](https://developers.facebook.com/) และตั้ง callback ตามตารางด้านบน
-สำหรับ Google ให้ตั้ง origin เป็น `http://localhost:3000` ด้วย
-ถ้า provider อยู่ในโหมดทดสอบ ให้บัญชีที่จะตรวจงานมีสิทธิ์ทดสอบแอปนั้น
-ตั้งค่าอย่างน้อยหนึ่ง provider แล้วเลือกปุ่มเข้าสู่ระบบของ provider นั้น
-ปุ่มของ provider ที่ไม่ได้ตั้งค่าจะยังแสดง แต่ไม่สามารถเข้าสู่ระบบได้
-หลังแก้ `.env` ให้หยุดและเปิด server ใหม่ และไม่ควรส่ง credentials จริงเข้า Git
+- You play X and move first; the bot plays O.
+- The initial difficulty is **Level 1 (Easy)**.
+- **Easy:** chooses a random free cell.
+- **Medium:** blocks an immediate player win, otherwise chooses randomly.
+- **Hard:** takes an immediate winning move, otherwise blocks an immediate loss, then chooses randomly.
+- A win adds **1 point**; a loss subtracts **1 point**, with a minimum score of **0**.
+- A draw leaves the score unchanged.
+- Three consecutive wins award **1 extra point**, for a total of **4 points**, then reset the streak.
+- A loss or draw resets the streak. All difficulty levels use the same scoring rules.
+- Restart is disabled while an existing board is empty. Refreshing resumes the saved round.
 
-## วิธีใช้งานและกติกา
+Use the restart/replay button for another round. The sound toggle is next to the logout button;
+logging out opens a confirmation dialog. The application interface is in Thai.
 
-- คุณเป็น X และเริ่มก่อน บอทเป็น O
-- ค่าเริ่มต้นคือเลเวล 1 (ง่าย)
-- ง่าย: สุ่มช่อง; ปานกลาง: กันคุณชนะแล้วสุ่ม; ยาก: ชนะทันทีถ้าทำได้ จากนั้นกันแพ้แล้วสุ่ม
-- เลือกระดับก่อนลงช่องแรกหรือหลังจบรอบ คะแนนใช้กติกาเดียวกันทุกระดับ
-- ชนะ +1; แพ้ −1 แต่ต่ำสุด 0; เสมอคะแนนไม่เปลี่ยน
-- ชนะติดกัน 3 ครั้งได้โบนัส +1 แล้วเริ่มนับใหม่ แพ้หรือเสมอรีเซ็ต streak
-- กระดานว่างจะเริ่มเกมใหม่ซ้ำไม่ได้; รีเฟรชหน้าแล้วเล่นรอบเดิมต่อได้
+## Inspect all player scores
 
-เข้าสู่ระบบที่หน้า `/login` แล้วเลือกระดับบอทใน sidebar กดช่องว่างบนกระดานเพื่อลง X
-เมื่อจบรอบ คะแนนและจำนวนชนะติดกันจะอัปเดต กด **เริ่มเกมใหม่** เพื่อเล่นรอบถัดไป
-เปิด–ปิดเสียงได้จากปุ่มข้าง **ออกจากระบบ** และการออกจากระบบมีหน้าต่างยืนยัน
-
-## ตรวจคะแนนผู้เล่นทั้งหมด
-
-เครื่องมือที่ใช้ตอบข้อกำหนดนี้คือ **Prisma Studio** เปิด terminal อีกหน้าต่างในโฟลเดอร์โปรเจกต์
-โดยใช้ `.env` เดียวกับแอป และเปิดฐานข้อมูลไว้ แล้วรัน:
+The tool provided for this requirement is **Prisma Studio**. Keep PostgreSQL running and
+open another terminal in the project directory, using the same `.env` as the application:
 
 ```bash
 npm run db:studio
 ```
 
-เปิด URL ที่คำสั่งแสดงใน terminal แล้วเลือกตาราง **`user`**
-แต่ละแถวคือผู้เล่นหนึ่งคน ดูข้อมูลได้จากคอลัมน์ต่อไปนี้:
+Open the URL printed in the terminal and select the **`user`** table.
+Each row represents a player:
 
-| คอลัมน์ | ความหมาย |
+| Column | Meaning |
 | --- | --- |
-| `name` | ชื่อผู้เล่น |
-| `email` | อีเมลที่ใช้เข้าสู่ระบบ |
-| `score` | คะแนนรวมปัจจุบัน |
-| `winStreak` | จำนวนชนะติดต่อกันที่กำลังนับเพื่อรับโบนัส |
+| `name` | Player name |
+| `email` | Sign-in email |
+| `score` | Current total score |
+| `winStreak` | Consecutive wins currently counted toward the next bonus |
 
-สามารถเรียงตาม `score` เพื่อเปรียบเทียบคะแนน และค้นหา/กรองผู้เล่นได้ใน Studio
-ผู้เล่นจะปรากฏหลังเข้าสู่ระบบครั้งแรก ส่วนตาราง **`game`** ใช้ตรวจกระดานและระดับบอทของรอบล่าสุด
-Prisma Studio เป็นเครื่องมือที่เข้าถึงฐานข้อมูลโดยตรง ผู้ตรวจงานต้องมี environment สำหรับเชื่อมฐานข้อมูล
-แอปไม่มีหน้าแอดมินหรือระบบ role แยกต่างหาก
+Sort by `score` to compare players, or use Studio's search/filter controls.
+A player appears after their first sign-in. The **`game`** table stores the latest board
+and bot difficulty for each player, rather than a history of every round.
+Studio connects directly to the database, so the reviewer needs the database environment.
+There is no separate admin page or application role system.
 
-## การทำงานตามโจทย์
+## Requirement coverage
 
-| ข้อกำหนด | สิ่งที่มีในโปรเจกต์ |
+| Requirement | Implementation |
 | --- | --- |
-| เกม OX แบบ Web Application | หน้าเกมบน Next.js ผู้เล่น X แข่งกับบอท O |
-| ต้องเข้าสู่ระบบก่อนเล่นและใช้ OAuth 2.0 | Google/Facebook ผ่าน Better Auth; ผู้ที่ยังไม่เข้าสู่ระบบจะไปหน้า login |
-| กติกา OX ทั่วไป | ตรวจชนะ เสมอ และช่องที่เล่นได้บน server |
-| เก็บคะแนนผู้เล่น | PostgreSQL เก็บคะแนนแยกตามบัญชี |
-| ชนะ +1 และแพ้ −1 | คิดคะแนนเมื่อจบรอบ โดยคะแนนต่ำสุดเป็น 0 |
-| ชนะติดกัน 3 ครั้งได้โบนัส +1 | ชนะสามรอบติดได้รวม 4 คะแนน แล้วเริ่มนับใหม่ |
-| เครื่องมือตรวจคะแนนทุกคน | Prisma Studio ตาราง `user` ตามวิธีด้านบน |
+| Tic-Tac-Toe web application | Next.js game screen: player X versus bot O |
+| Sign-in required; OAuth 2.0 authentication | Google/Facebook via Better Auth; unauthenticated visitors are redirected to login |
+| Standard Tic-Tac-Toe rules | Server validates moves and detects wins and draws |
+| Persistent player scores | PostgreSQL stores scores per account |
+| Win +1; loss −1 | Scores update when a round ends, with a minimum of 0 |
+| Extra +1 after three consecutive wins | Three consecutive wins total 4 points, then the streak resets |
+| Tool to inspect every player's score | Prisma Studio, `user` table, as described above |
 
-กรณีเสมอคะแนนไม่เปลี่ยน และเมื่อแพ้หรือเสมอจะรีเซ็ตจำนวนชนะติดต่อกัน
-server ตรวจเจ้าของเกมและ version ของกระดาน เพื่อป้องกันคำขอซ้ำคิดคะแนนมากกว่าหนึ่งครั้ง
+Draws leave points unchanged and reset the streak. The server checks game ownership and
+board version, and saves moves and scoring in a transaction to prevent duplicate score awards.
+The original assignment is in [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md).
 
-## ทดสอบโปรเจกต์
+## Tests
 
 ```bash
 npm run lint
@@ -126,18 +137,19 @@ npm run typecheck
 npm test
 ```
 
-`npm test` ตรวจชุดทดสอบกติกา คะแนน และ server โดยใช้ฐานข้อมูลจำลอง
-จึงรันได้โดยไม่ต้องเปิด PostgreSQL ชุดทดสอบฐานข้อมูลจริงหนึ่งรายการจะขึ้น **skip** โดยตั้งใจ
-เพราะต้องเปิดฐานข้อมูลและใช้ migrations ก่อน ไม่ได้หมายความว่าเทสต์ล้มเหลว
+`npm test` checks game rules, scoring, and server behavior using a simulated database.
+It does not require PostgreSQL. One real-database integration test is intentionally **skipped**
+in this command because it requires a running database and applied migrations.
 
-เมื่อเตรียมฐานข้อมูลตามขั้นตอนติดตั้งแล้ว ให้รันทดสอบเพิ่มเติม:
+After preparing the database with the setup commands above, run it separately:
 
 ```bash
 npm run test:db
 ```
 
-เทสต์นี้ตรวจว่าระดับบอทถูกบันทึกจริง และคำขอชนะที่ส่งพร้อมกันคิดคะแนนเพียงครั้งเดียว
-ใช้ฐานข้อมูลสำหรับพัฒนา/ทดสอบ เพราะจะสร้างผู้ใช้ชั่วคราวและลบข้อมูลของผู้ใช้นั้นหลังทดสอบ
+This verifies difficulty persistence and that concurrent winning requests award points only once.
+Use a development/test database: the test creates a temporary player and removes that player's
+data afterward.
 
 ## Production build
 
@@ -146,50 +158,48 @@ npm run build
 npm start
 ```
 
-หยุด dev server ก่อนใช้ port เดียวกัน และตั้ง environment ให้ครบ
-หากใช้ URL อื่น ให้แก้ `BETTER_AUTH_URL` และ callback ของ provider ให้ตรงกัน
-การ build ต้องเชื่อมต่ออินเทอร์เน็ตเพื่อโหลด Google Fonts
+Stop the development server first if it uses the same port, and provide all environment variables.
+For another deployment URL, update `BETTER_AUTH_URL` and provider callbacks to match.
+The build needs internet access to download Google Fonts.
 
-## เทคโนโลยี
+## Stack
 
 Next.js 16, React 19, TypeScript, Tailwind CSS 4, daisyUI 5, Font Awesome 7,
-Better Auth, Prisma 7 และ PostgreSQL 17 โดยใช้เวอร์ชันจาก `package-lock.json`
+Better Auth, Prisma 7, and PostgreSQL 17. Exact dependency versions are locked in `package-lock.json`.
 
-## คำสั่ง
+## Commands
 
-| คำสั่ง | หน้าที่ |
+| Command | Purpose |
 | --- | --- |
-| `npm run dev` | เปิด dev server |
-| `npm run build` / `npm start` | สร้างและเปิด production build |
-| `npm run lint` / `npm run typecheck` | ตรวจโค้ด |
-| `npm test` | ทดสอบกติกาและ server ด้วยฐานข้อมูลจำลอง |
-| `npm run test:db` | ทดสอบ transaction บนฐานข้อมูลพัฒนาจริง |
-| `npm run db:deploy` | ใช้ migrations ที่มีอยู่ |
-| `npm run db:migrate -- --name ชื่อการเปลี่ยนแปลง` | สร้าง migration เมื่อแก้ schema ในการพัฒนา |
-| `npm run db:generate` | สร้าง Prisma client |
-| `npm run db:studio` | ดูข้อมูลในฐานข้อมูล |
+| `npm run dev` | Start the development server |
+| `npm run build` / `npm start` | Build and serve the production application |
+| `npm run lint` / `npm run typecheck` | Check code quality and types |
+| `npm test` | Run game and server tests with a simulated database |
+| `npm run test:db` | Test transactions against a real development database |
+| `npm run db:deploy` | Apply existing migrations |
+| `npm run db:migrate -- --name describe_change` | Create a migration after changing the schema during development |
+| `npm run db:generate` | Generate the Prisma Client; does not modify database tables |
+| `npm run db:studio` | Inspect database records |
 
-## โครงสร้าง
+## Project structure
 
-- `src/app`: routes, layout และ global theme
-- `src/actions`: Server Actions รับคำสั่งเกมจาก client
-- `src/components/game`: header, board, sidebar, difficulty picker และสัญลักษณ์ X/O
-- `src/components/auth`: ปุ่มเข้าสู่ระบบและออกจากระบบ
-- `src/components/game/ox-game.tsx`: ประกอบหน้าเกม
-- `src/hooks`: สถานะเกมและเสียง
-- `src/lib`: กติกา คะแนน config ระดับบอท authentication และฐานข้อมูล
-- `src/styles/game`: สไตล์แยกตามหน้าที่; `ox-game.css` กำหนดลำดับ import
-- `public/game-assets`: ภาพและเสียงที่ใช้จริง ชื่อไฟล์ตามหน้าที่
-- `prisma`: schema และ migrations; `prisma.config.ts`: config ของ CLI
+- `src/app`: routes, layout, and global theme
+- `src/actions`: Server Actions accepting game requests from the client
+- `src/components/game`: game screen, header, board, sidebar, difficulty picker, and X/O marks
+- `src/components/auth`: sign-in and sign-out controls
+- `src/hooks`: game state and audio
+- `src/lib`: game rules, scoring, difficulty configuration, authentication, and database access
+- `src/styles/game`: styles grouped by purpose; `ox-game.css` defines their import order
+- `public/game-assets`: game images and sound files
+- `prisma`: schema and migrations; `prisma.config.ts`: Prisma CLI configuration
 - `tests`: automated tests
 
-ข้อกำหนด: [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md)
+## Troubleshooting
 
-## แก้ปัญหาเบื้องต้น
+- **Database connection fails:** check `docker compose ps` and `DATABASE_URL`. Local Docker exposes PostgreSQL on port **5433**.
+- **OAuth sign-in fails:** check provider credentials, callback URLs, and test-account permissions.
+- **Prisma Client is out of date:** run `npm run db:deploy` and `npm run db:generate`, then restart the server.
+- **Port 3000 is occupied:** stop the process using it, or change the port and update the application URL and OAuth callbacks together.
 
-- เชื่อมฐานข้อมูลไม่ได้: ตรวจ `docker compose ps` และ `DATABASE_URL` โดย Docker ในเครื่องใช้ port **5433**
-- OAuth เข้าสู่ระบบไม่ได้: ตรวจ credentials, callback URL และสิทธิ์ของบัญชีทดสอบ
-- Prisma client ไม่ตรงกับ schema: รัน `npm run db:deploy` และ `npm run db:generate` แล้วเปิด server ใหม่
-- Port 3000 ถูกใช้: หยุดโปรแกรมที่ใช้ port นั้น หรือเปลี่ยน port พร้อม URL และ OAuth callback ให้ตรงกัน
-
-หยุดฐานข้อมูลโดยเก็บคะแนนไว้ด้วย `docker compose stop` และเปิดใหม่ด้วย `docker compose up -d --wait`
+Stop PostgreSQL while preserving data with `docker compose stop`.
+Start it again with `docker compose up -d --wait`.
