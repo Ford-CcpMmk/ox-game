@@ -1,0 +1,4 @@
+ALTER TABLE "user" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0,
+                   ADD COLUMN "winStreak" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "game" ADD COLUMN "scoreDelta" INTEGER,
+                   ADD COLUMN "bonus" INTEGER NOT NULL DEFAULT 0;

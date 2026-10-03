@@ -1,0 +1,112 @@
+/* Game visuals: clay surfaces, component states and responsive sizing.
+   General layout uses Tailwind utilities; controls retain daisyUI btn styling. */
+
+/* Board and turn status */
+.ox-turn-pill {
+  padding: 6px 0;
+  border-radius: 0;
+  color: #8863ad;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  max-width: 100%;
+  text-align: center;
+  border: 0;
+}
+.ox-clay-board {
+  gap: clamp(0.6rem, 2.5vw, 0.9rem);
+  padding: clamp(0.85rem, 3vw, 1.4rem);
+  border: 1px solid #fffdf7;
+  border-radius: clamp(1.4rem, 5vw, 2rem);
+  background: linear-gradient(145deg, #fffaf0, #ebdfcc);
+  box-shadow:
+    inset 3px 3px 5px #fff,
+    inset -3px -4px 6px #d9cbb6,
+    0 8px 0 #d7c4ae,
+    0 14px 18px #a88a6c33;
+  margin-bottom: 0.5rem;
+  max-width: 480px;
+  position: relative;
+}
+.ox-clay-cell {
+  border: 1px solid #e7d9c4;
+  border-radius: clamp(0.7rem, 2.5vw, 1rem);
+  background: linear-gradient(140deg, #e6d7bf, #f6eddd 70%);
+  box-shadow:
+    inset 4px 5px 8px #9e87644d,
+    inset -3px -3px 5px #fffdf2,
+    0 1px 1px #fff;
+  transition:
+    background 0.18s,
+    box-shadow 0.18s;
+  padding: 9%;
+}
+.ox-clay-cell:enabled {
+  cursor: pointer;
+}
+.ox-clay-cell:enabled:hover {
+  background: linear-gradient(140deg, #dfd0ee, #f1eaf9);
+}
+.ox-clay-cell:focus-visible {
+  outline: 3px solid #8060ac;
+  outline-offset: 4px;
+}
+.ox-clay-cell-winner {
+  border-color: #69ac8c;
+  background: linear-gradient(140deg, #c7e5d1, #e7f4e6);
+  box-shadow:
+    inset 3px 4px 7px #5f997b40,
+    inset -3px -3px 5px #f6fff2,
+    0 0 0 2px #90c9ab;
+}
+.ox-new-game {
+  min-height: 3.25rem;
+  color: #fff;
+  border: 1px solid #b398dd;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #b89ae8, #9270ce);
+  box-shadow:
+    inset 0 2px 2px #e5d6ff9c,
+    0 4px 0 #7957b3,
+    0 7px 12px #9474bb30;
+  width: min(320px, 100%);
+  font-size: 16px;
+  margin-top: 6px;
+}
+.ox-new-game:enabled:hover {
+  background: linear-gradient(180deg, #ad8cde, #8662c1);
+}
+.ox-new-game:enabled:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 2px 2px #e5d6ff80,
+    0 2px 0 #7957b3;
+}
+.ox-new-game:disabled {
+  color: #695d7f;
+  background: #ded3ee;
+  box-shadow: none;
+}
+
+.ox-first-game {
+  border-color: #68b695;
+  background: linear-gradient(180deg, #83cfad, #4f9e7c);
+  box-shadow:
+    inset 0 2px 2px #d7ffeb9c,
+    0 4px 0 #397c60,
+    0 7px 12px #559c7930;
+}
+.ox-first-game:enabled:hover {
+  background: linear-gradient(180deg, #75c6a1, #438e6e);
+}
+.ox-first-game:enabled:active {
+  box-shadow:
+    inset 0 2px 2px #d7ffeb80,
+    0 2px 0 #397c60;
+}

@@ -1,0 +1,46 @@
+/* Motion */
+@keyframes ox-score-float {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20%) scale(0.75);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(-50%, -55%) scale(1);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, -80%);
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -130%);
+  }
+}
+@keyframes ox-score-fade {
+  0%,
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -50%);
+  }
+}
+@keyframes ox-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

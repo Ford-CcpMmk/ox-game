@@ -1,0 +1,10 @@
+/* Import order preserves the approved cascade. */
+@import "./game/board.css";
+@import "./game/layout.css";
+@import "./game/sidebar.css";
+@import "./game/logout.css";
+@import "./game/feedback.css";
+@import "./game/sound.css";
+@import "./game/difficulty.css";
+@import "./game/responsive.css";
+@import "./game/motion.css";

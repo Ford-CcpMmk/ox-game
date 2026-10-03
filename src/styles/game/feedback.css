@@ -1,0 +1,97 @@
+/* Floating score feedback */
+.ox-score-change {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  pointer-events: none;
+  min-width: 0;
+  max-width: calc(100% - 24px);
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  border: 0;
+  color: #287b5a;
+  background: transparent;
+  box-shadow: none;
+  animation: ox-score-float 2.4s ease-out both;
+  text-align: center;
+  width: max-content;
+  text-shadow:
+    0 2px 3px #fff,
+    0 0 8px #fff,
+    0 0 16px #fff;
+}
+.ox-score-change .ox-ui-icon {
+  width: 24px;
+  height: 24px;
+  display: none;
+}
+.ox-score-change p {
+  font-size: clamp(28px, 5vw, 38px);
+  font-weight: 700;
+  line-height: 1.4;
+}
+.ox-score-change span {
+  display: block;
+  font-size: 13px;
+  margin-top: 3px;
+  font-weight: 600;
+}
+.ox-score-change.is-loss {
+  color: #ac5550;
+  background: transparent;
+  box-shadow: none;
+  top: 50%;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  text-shadow:
+    0 2px 3px #fff,
+    0 0 8px #fff,
+    0 0 16px #fff;
+}
+.ox-score-change.is-draw {
+  color: #796094;
+  background: transparent;
+  box-shadow: none;
+  top: 50%;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  text-shadow:
+    0 2px 3px #fff,
+    0 0 8px #fff,
+    0 0 16px #fff;
+}
+.ox-board-area > .ox-new-game {
+  margin-top: 24px;
+}
+.ox-score-change.is-gain {
+  top: 50%;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-shadow:
+    0 2px 3px #fff,
+    0 0 8px #fff,
+    0 0 16px #fff;
+}

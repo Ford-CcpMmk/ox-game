@@ -1,0 +1,83 @@
+/* Shared icons and logout dialog */
+.ox-ui-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+.ox-signout-dialog {
+  margin: auto;
+  padding: 0;
+  width: min(430px, calc(100% - 32px));
+  max-height: calc(100svh - 32px);
+  overflow-y: auto;
+  color: #343348;
+  border: 2px solid #fffdf8;
+  border-radius: 28px;
+  background: linear-gradient(145deg, #fffdf8, #f6e9dc);
+  box-shadow:
+    inset 0 2px 2px #fff,
+    0 8px 0 -3px #dfcab6,
+    0 24px 70px #42345140;
+}
+.ox-signout-dialog::backdrop {
+  background: #39304666;
+  backdrop-filter: blur(5px);
+}
+.ox-signout-content {
+  padding: 30px 26px;
+  text-align: center;
+}
+.ox-signout-symbol {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  border-radius: 22px;
+  color: #8d64bd;
+  background: linear-gradient(145deg, #f0e4ff, #dfcaf3);
+  box-shadow:
+    inset 0 2px 3px #fff9,
+    0 4px 0 #cbb3e1;
+}
+.ox-signout-symbol svg {
+  width: 28px;
+  height: 28px;
+}
+.ox-signout-content h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.ox-signout-content p {
+  font-size: 14px;
+  line-height: 1.9;
+  color: #80718b;
+}
+.ox-signout-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+.ox-signout-actions .btn {
+  flex: 1;
+  width: auto;
+  margin: 0;
+  min-height: 48px;
+  height: auto;
+  font-size: 14px;
+  border-radius: 999px;
+}
+.ox-signout-cancel {
+  border: 1px solid #e4d5c7;
+  color: #695776;
+  background: #fffaf4;
+  box-shadow:
+    inset 0 2px 2px #fff,
+    0 3px 0 #e4d3c2;
+}
+.ox-signout-actions .btn:focus-visible {
+  outline: 3px solid #8157b0;
+  outline-offset: 4px;
+}

@@ -1,0 +1,1 @@
+ALTER TABLE "game" ALTER COLUMN "difficulty" SET DEFAULT 1;
